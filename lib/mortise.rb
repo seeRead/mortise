@@ -2,6 +2,7 @@ require "mortise/version"
 require "mortise/checker"
 require "mortise/issue"
 require "mortise/errors"
+require 'cgi'
 
 module Mortise
   TENON_APP_ID = '490866e2ad3b501842cef0569e4c0ee0'
@@ -45,16 +46,18 @@ module Mortise
       if @checker.issues.count == 0
         return true
       else
+        puts @checker.raw
         str =""
         @checker.issues.each do |i|
           str += "Line "
           str += i.position["line"].to_s
           str += ": "
           str += i.error_title
-          str += "\n"
+          str += "\n\n"
+          str += CGI.unescapeHTML(i.error_snippet)
+          str += "\n\n"
           str += i.error_description
-          str += "\n"
-          str += "---\n\n"
+          str += "\n---\n\n"
         end
         @message = str
         return false
