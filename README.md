@@ -19,6 +19,25 @@ Or install it yourself as:
     $ gem install mortise
 
 ## Usage
+This version allows for a) sending HTML to tenon for auditing, b) loading your API Key via ```ENV['TENON_KEY'] ``` and c) use in rspec like so:
+
+```ruby
+require 'rails_helper'
+
+feature "Visiting root" do
+  it "renders a valid home page" do
+    visit root_path
+    expect(page).to be_accessible_markup
+  end
+end
+```
+
+Make sure to set the ```spec/support/mortise.rb``` like so:
+
+```ruby
+include Mortise
+WebMock.disable_net_connect!(:allow => /tenon/)
+```
 
 You'll need an API Key to use Tenon.io, so first [register](http://tenon.io/register.php) and come back when you've got your API Key.
 

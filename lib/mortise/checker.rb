@@ -44,9 +44,17 @@ module Mortise
     end
 
     def tenon_response
-      @tenon_response ||= HTTParty.post(tenon_uri, body: { url: url, key: key, appID: tenon_app_id },
+      #set key based on whether url var is a url or src
+      body = { key: key, appID: tenon_app_id }
+      if url.starts_with?("http")
+        body[:url]= url
+      else
+        body[:src]= url
+      end
+      @tenon_response ||= HTTParty.post(tenon_uri, body: body,
                                                    headers: { 'Content-Type'  => 'application/x-www-form-urlencoded',
                                                               'Cache-Control' => 'no-cache' })
+
     end
   end
 end
